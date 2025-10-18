@@ -13398,6 +13398,10 @@ class binance(Exchange, ImplicitAPI):
         :returns dict[]: an array of `long short ratio structures <https://docs.ccxt.com/#/?id=long-short-ratio-structure>`
         """
         self.load_markets()
+        paginate = False
+        paginate, params = self.handle_option_and_params(params, 'fetchLongShortRatioHistory', 'paginate', False)
+        if paginate:
+            return self.fetch_paginated_call_deterministic('fetchLongShortRatioHistory', symbol, since, limit, timeframe, params, 500)
         market = self.market(symbol)
         if timeframe is None:
             timeframe = '1d'
